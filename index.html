@@ -115,13 +115,12 @@
     <label for="courseSelect">SINAVINA GİRECEĞİNİZ TEMEL DERS</label>
     <select id="courseSelect">
         <option value="" disabled selected>Ders seçimi yapınız...</option>
-        <option value="matematik.csv">Matematik-1</option>
-        <option value="fizik.csv">Fizik-1</option>
-        <option value="lineer.csv">Lineer Cebir</option>
+        <option value="matematik.csv">MAT1072 Matematik 2</option>
+        <option value="lineer.csv">MAT1320 Lineer Cebir</option>       
     </select>
 
     <label for="studentId">ÖĞRENCİ NUMARANIZ</label>
-    <input type="text" id="studentId" placeholder="Örn: 22011001" autocomplete="off">
+    <input type="text" id="studentId" autocomplete="off">
     
     <button onclick="searchExam()">SORGULA</button>
 
@@ -173,11 +172,11 @@ function searchExam() {
                 `;
             } else {
                 sonucDiv.className = "hata";
-                sonucDiv.innerHTML = "Kayıt bulunamadı. Lütfen numaranızı ve dersi kontrol ediniz.";
+                sonucDiv.innerHTML = "Kayıt bulunamadı. Lütfen numaranızı ve dersi kontrol ediniz.<br><br>Eğer ders adı ve numara doğru olduğu halde kayıt çıkmıyorsa, durumu matblm@yildiz.edu.tr adresine bildiriniz.";
             }
         },
         error: function() {
-            alert("Veri dosyasına ulaşılamadı. CSV dosyasının adını ve GitHub'daki varlığını kontrol edin.");
+            alert("Veri dosyasına ulaşılamadı. Lütfen matblm@yildiz.edu.tr adresine durumu bildiriniz.");
         }
     });
 }
