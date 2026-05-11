@@ -43,7 +43,9 @@ function sorgula() {
     if (!no) { alert("Lütfen numaranızı girin"); return; }
 
     // CSV dosyasını GitHub'daki dosya yolundan okur
-    Papa.parse(dersDosyası, {
+    const dosyaYolu = dersDosyası + "?v=" + new Date().getTime();
+
+    Papa.parse(dosyaYolu, {
     download: true,
     header: true,
     skipEmptyLines: true,
