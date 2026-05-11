@@ -112,7 +112,7 @@
 <div class="container">
     <h2>Sınav Yeri Sorgulama</h2>
     
-    <label for="courseSelect">SINAV DERSİ</label>
+    <label for="courseSelect">SINAVINA GİRECEĞİNİZ TEMEL DERS</label>
     <select id="courseSelect">
         <option value="" disabled selected>Ders seçimi yapınız...</option>
         <option value="matematik.csv">Matematik-1</option>
@@ -120,7 +120,7 @@
         <option value="lineer.csv">Lineer Cebir</option>
     </select>
 
-    <label for="studentId">ÖĞRENCİ NUMARASI</label>
+    <label for="studentId">ÖĞRENCİ NUMARANIZ</label>
     <input type="text" id="studentId" placeholder="Örn: 22011001" autocomplete="off">
     
     <button onclick="searchExam()">SORGULA</button>
@@ -162,12 +162,12 @@ function searchExam() {
                     </div>
 
                     <div style="margin-bottom: 15px;">
-                        <small style="color: #7f8c8d; display: block; margin-bottom: 4px;">SINAV FAKÜLTESİ</small>
+                        <small style="color: #7f8c8d; display: block; margin-bottom: 4px;">FAKÜLTE</small>
                         <span style="font-size: 1.1rem; font-weight: 600; color: #34495e;">${student.Fakulte}</span>
                     </div>
 
                     <div style="margin-bottom: 10px;">
-                        <small style="color: #7f8c8d; display: block; margin-bottom: 4px;">SINAV DERSLİĞİ</small>
+                        <small style="color: #7f8c8d; display: block; margin-bottom: 4px;">SINAV SALONU</small>
                         <span style="font-size: 1.3rem; font-weight: 800; color: #e74c3c;">${student.Derslik}</span>
                     </div>
                 `;
