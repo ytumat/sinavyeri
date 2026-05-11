@@ -34,24 +34,103 @@
     color: #c53030;
 }
 
+/* Ana konteyner düzeni */
+.container {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    max-width: 450px;
+    width: 90%;
+}
+
+h2 {
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+}
+
+/* Giriş alanları için ortak stil */
+select, input {
+    width: 100%;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 15px;
+    color: #4a5568;
+    background-color: #f8fafc;
+    transition: all 0.3s ease;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* Focus (Tıklama) anındaki efekt */
+select:focus, input:focus {
+    border-color: #4299e1;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+/* Sorgula butonu */
+button {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(49, 130, 206, 0.4);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Label (Etiket) yazıları için */
+label {
+    display: block;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    color: #718096;
+    margin-bottom: 6px;
+    margin-left: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2>Sınav Yeri Sorgula</h2>
+<div class="container">
+    <h2>Sınav Yeri Sorgulama</h2>
     
-    <label>Ders Seçiniz:</label>
-    <select id="dersSecimi">
+    <label for="courseSelect">SINAV DERSİ</label>
+    <select id="courseSelect">
+        <option value="" disabled selected>Ders seçimi yapınız...</option>
         <option value="matematik.csv">Matematik-1</option>
-        <option value="fizik.csv">Fizik-2</option>
+        <option value="fizik.csv">Fizik-1</option>
         <option value="lineer.csv">Lineer Cebir</option>
     </select>
 
-    <input type="text" id="ogrenciNo" placeholder="Öğrenci Numaranız">
-    <button onclick="sorgula()">Sorgula</button>
+    <label for="studentId">ÖĞRENCİ NUMARASI</label>
+    <input type="text" id="studentId" placeholder="Örn: 22011001" autocomplete="off">
+    
+    <button onclick="searchExam()">SORGULA</button>
 
-    <div id="sonuc"></div>
+    <div id="result"></div>
 </div>
 
 <script>
