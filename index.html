@@ -143,6 +143,7 @@ function searchExam() {
         download: true,
         header: true,
         skipEmptyLines: true,
+        encoding: "windows-1254", // Türkçe karakter desteği için
         complete: function(results) {
             const liste = results.data;
             // CSV'deki başlıkların No, Ad, Soyad, Fakulte, Derslik olduğundan emin olun
