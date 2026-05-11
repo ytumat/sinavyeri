@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sınav Yeri Sorgulama Sistemi</title>
+    <title>Sınav Yeri Sorgulama | Exam Location Inquiry</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
         body { 
@@ -31,24 +31,41 @@
             color: #1a202c;
             margin-bottom: 25px;
             font-size: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .en-title {
+            display: block;
+            font-size: 1rem;
+            color: #718096;
+            font-weight: 400;
+            margin-top: 5px;
         }
 
         label {
             display: block;
             text-align: left;
-            font-size: 13px;
-            font-weight: 600;
-            color: #718096;
-            margin-bottom: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #4a5568;
+            margin-bottom: 8px;
             margin-left: 4px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
+        .en-label {
+            display: block;
+            font-size: 11px;
+            color: #a0aec0;
+            font-weight: 500;
+            text-transform: none;
+        }
+
         select, input {
             width: 100%;
             padding: 14px 16px;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
             font-size: 15px;
@@ -104,25 +121,32 @@
             border: 1px solid #feb2b2;
             color: #c53030;
             text-align: center;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Sınav Yeri Sorgulama</h2>
+    <h2>Sınav Yeri Sorgulama<span class="en-title">Exam Location Inquiry</span></h2>
     
-    <label for="courseSelect">SINAVINA GİRECEĞİNİZ TEMEL DERS</label>
+    <label for="courseSelect">
+        SINAVINA GİRECEĞİNİZ TEMEL DERS
+        <span class="en-label">SELECT YOUR EXAM SUBJECT</span>
+    </label>
     <select id="courseSelect">
-        <option value="" disabled selected>Ders seçimi yapınız...</option>
+        <option value="" disabled selected>Ders seçimi yapınız / Select course...</option>
         <option value="matematik.csv">MAT1072 Matematik 2</option>
-        <option value="lineer.csv">MAT1320 Lineer Cebir</option>       
+        <option value="lineer.csv">MAT1320 Lineer Cebir</option>        
     </select>
 
-    <label for="studentId">ÖĞRENCİ NUMARANIZ</label>
+    <label for="studentId">
+        ÖĞRENCİ NUMARANIZ
+        <span class="en-label">STUDENT ID NUMBER</span>
+    </label>
     <input type="text" id="studentId" autocomplete="off">
     
-    <button onclick="searchExam()">SORGULA</button>
+    <button onclick="searchExam()">SORGULA / SEARCH</button>
 
     <div id="result"></div>
 </div>
@@ -133,51 +157,64 @@ function searchExam() {
     const no = document.getElementById('studentId').value.trim();
     const sonucDiv = document.getElementById('result');
 
-    if (!dersDosyasi) { alert("Lütfen bir ders seçin"); return; }
-    if (!no) { alert("Lütfen numaranızı girin"); return; }
+    if (!dersDosyasi) { alert("Lütfen bir ders seçin / Please select a course"); return; }
+    if (!no) { alert("Lütfen numaranızı girin / Please enter your student ID"); return; }
 
-    // Tarayıcı önbelleğini engellemek için versiyon ekliyoruz (A yöntemi)
     const dosyaYolu = dersDosyasi + "?v=" + new Date().getTime();
 
     Papa.parse(dosyaYolu, {
         download: true,
         header: true,
         skipEmptyLines: true,
-        encoding: "windows-1254", // Türkçe karakter desteği için
+        encoding: "UTF-8",
         complete: function(results) {
             const liste = results.data;
-            // CSV'deki başlıkların No, Ad, Soyad, Fakulte, Derslik olduğundan emin olun
-            const student = liste.find(o => o.No === no);
+            
+            // Başlık temizliği (BOM ve boşluklar için)
+            const temizListe = liste.map(item => {
+                const yeniObj = {};
+                for (let key in item) {
+                    yeniObj[key.trim().replace(/^\uFEFF/, "")] = item[key];
+                }
+                return yeniObj;
+            });
+
+            const student = temizListe.find(o => String(o.No).trim() === no);
 
             sonucDiv.style.display = "block";
             
             if (student) {
                 sonucDiv.className = "basarili";
-                const tamAd = `${student.Ad} ${student.Soyad}`;
+                const tamAd = `${student.Ad || ''} ${student.Soyad || ''}`;
                 
                 sonucDiv.innerHTML = `
                     <div style="text-align: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
-                        <span style="font-size: 1.1rem; color: #2c3e50;">Sayın</span><br>
+                        <span style="font-size: 1.1rem; color: #2c3e50;">Sayın / Dear</span><br>
                         <strong style="font-size: 1.4rem; color: #1a73e8; text-transform: uppercase;">${tamAd}</strong>
                     </div>
 
                     <div style="margin-bottom: 15px;">
-                        <small style="color: #7f8c8d; display: block; margin-bottom: 4px;">FAKÜLTE</small>
-                        <span style="font-size: 1.1rem; font-weight: 600; color: #34495e;">${student.Fakulte}</span>
+                        <small style="color: #7f8c8d; display: block; margin-bottom: 4px;">FAKÜLTE / FACULTY</small>
+                        <span style="font-size: 1.1rem; font-weight: 600; color: #34495e;">${student.Fakulte || '-'}</span>
                     </div>
 
                     <div style="margin-bottom: 10px;">
-                        <small style="color: #7f8c8d; display: block; margin-bottom: 4px;">SINAV SALONU</small>
-                        <span style="font-size: 1.3rem; font-weight: 800; color: #e74c3c;">${student.Derslik}</span>
+                        <small style="color: #7f8c8d; display: block; margin-bottom: 4px;">SINAV SALONU / EXAM HALL</small>
+                        <span style="font-size: 1.3rem; font-weight: 800; color: #e74c3c;">${student.Derslik || '-'}</span>
                     </div>
                 `;
             } else {
                 sonucDiv.className = "hata";
-                sonucDiv.innerHTML = "Kayıt bulunamadı. Lütfen numaranızı ve dersi kontrol ediniz.<br><br>Eğer ders adı ve numara doğru olduğu halde kayıt çıkmıyorsa, durumu matblm@yildiz.edu.tr adresine bildiriniz.";
+                sonucDiv.innerHTML = `
+                    <strong>Kayıt bulunamadı.</strong><br>
+                    Lütfen numaranızı ve dersi kontrol ediniz.<br><br>
+                    <strong>Record not found.</strong><br>
+                    Please check your student ID and the selected course.
+                `;
             }
         },
         error: function() {
-            alert("Veri dosyasına ulaşılamadı. Lütfen matblm@yildiz.edu.tr adresine durumu bildiriniz.");
+            alert("Dosya yüklenemedi / Failed to load file. Contact: matblm@yildiz.edu.tr");
         }
     });
 }
