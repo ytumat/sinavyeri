@@ -2,114 +2,109 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sınav Yeri Sorgulama Sistemi</title>
-    <!-- Hızlı CSV okuma için PapaParse kütüphanesi -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; background: #f4f7f6; }
-        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 350px; }
-        select, input, button { width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        button { background: #2c3e50; color: white; cursor: pointer; border: none; font-weight: bold; }
-        button:hover { background: #34495e; }
-        #sonuc { margin-top: 20px; padding: 15px; border-radius: 5px; display: none; }
-        .basarili { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .hata { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-#sonuc {
-    margin-top: 25px;
-    padding: 20px;
-    border-radius: 12px;
-    display: none;
-    transition: all 0.3s ease;
-}
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start;
+            padding-top: 50px; 
+            background: #f4f7f6; 
+            margin: 0;
+        }
 
-.basarili {
-    background: #ffffff;
-    border-left: 6px solid #1a73e8; /* Mavi bir vurgu hattı */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
+        .container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+        }
 
-.hata {
-    background: #fff5f5;
-    border: 1px solid #feb2b2;
-    color: #c53030;
-}
+        h2 {
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+        }
 
-/* Ana konteyner düzeni */
-.container {
-    background: #ffffff;
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    max-width: 450px;
-    width: 90%;
-}
+        label {
+            display: block;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: #718096;
+            margin-bottom: 6px;
+            margin-left: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-h2 {
-    font-weight: 700;
-    color: #1a202c;
-    margin-bottom: 25px;
-    font-size: 1.5rem;
-}
+        select, input {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            color: #4a5568;
+            background-color: #f8fafc;
+            transition: all 0.3s ease;
+            outline: none;
+            box-sizing: border-box;
+        }
 
-/* Giriş alanları için ortak stil */
-select, input {
-    width: 100%;
-    padding: 14px 16px;
-    margin-bottom: 18px;
-    border: 2px solid #e2e8f0;
-    border-radius: 10px;
-    font-size: 15px;
-    color: #4a5568;
-    background-color: #f8fafc;
-    transition: all 0.3s ease;
-    outline: none;
-    box-sizing: border-box;
-}
+        select:focus, input:focus {
+            border-color: #4299e1;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+        }
 
-/* Focus (Tıklama) anındaki efekt */
-select:focus, input:focus {
-    border-color: #4299e1;
-    background-color: #fff;
-    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
-}
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
+        }
 
-/* Sorgula butonu */
-button {
-    width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
-}
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(49, 130, 206, 0.4);
+        }
 
-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 15px rgba(49, 130, 206, 0.4);
-}
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
 
-button:active {
-    transform: translateY(0);
-}
+        .basarili {
+            background: #ffffff;
+            border-left: 6px solid #1a73e8;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
 
-/* Label (Etiket) yazıları için */
-label {
-    display: block;
-    text-align: left;
-    font-size: 13px;
-    font-weight: 600;
-    color: #718096;
-    margin-bottom: 6px;
-    margin-left: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
+        .hata {
+            background: #fff5f5;
+            border: 1px solid #feb2b2;
+            color: #c53030;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -134,60 +129,57 @@ label {
 </div>
 
 <script>
-function sorgula() {
-    const dersDosyası = document.getElementById('dersSecimi').value;
-    const no = document.getElementById('ogrenciNo').value.trim();
-    const sonucDiv = document.getElementById('sonuc');
+function searchExam() {
+    const dersDosyasi = document.getElementById('courseSelect').value;
+    const no = document.getElementById('studentId').value.trim();
+    const sonucDiv = document.getElementById('result');
 
+    if (!dersDosyasi) { alert("Lütfen bir ders seçin"); return; }
     if (!no) { alert("Lütfen numaranızı girin"); return; }
 
-    // CSV dosyasını GitHub'daki dosya yolundan okur
-    const dosyaYolu = dersDosyası + "?v=" + new Date().getTime();
+    // Tarayıcı önbelleğini engellemek için versiyon ekliyoruz (A yöntemi)
+    const dosyaYolu = dersDosyasi + "?v=" + new Date().getTime();
 
     Papa.parse(dosyaYolu, {
-    download: true,
-    header: true,
-    skipEmptyLines: true,
-    complete: function(results) {
-        const liste = results.data;
-        
-        // Excel sütun başlıklarınız: "No", "Ad", "Soyad", "Fakulte", "Derslik"
-        // Liste içinde öğrenci numarasını (no) arıyoruz
-        const student = liste.find(o => o.No === no);
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            const liste = results.data;
+            // CSV'deki başlıkların No, Ad, Soyad, Fakulte, Derslik olduğundan emin olun
+            const student = liste.find(o => o.No === no);
 
-        sonucDiv.style.display = "block";
-        
-        if (student) {
-            sonucDiv.className = "basarili";
+            sonucDiv.style.display = "block";
             
-            // Ad ve Soyad sütunlarını birleştiriyoruz
-            const tamAd = `${student.Ad} ${student.Soyad}`;
-            
-            sonucDiv.innerHTML = `
-    <div style="text-align: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
-        <span style="font-size: 1.1rem; color: #2c3e50;">Sayın</span><br>
-        <strong style="font-size: 1.4rem; color: #1a73e8; text-transform: uppercase;">${tamAd}</strong>
-    </div>
+            if (student) {
+                sonucDiv.className = "basarili";
+                const tamAd = `${student.Ad} ${student.Soyad}`;
+                
+                sonucDiv.innerHTML = `
+                    <div style="text-align: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
+                        <span style="font-size: 1.1rem; color: #2c3e50;">Sayın</span><br>
+                        <strong style="font-size: 1.4rem; color: #1a73e8; text-transform: uppercase;">${tamAd}</strong>
+                    </div>
 
-    <div style="margin-bottom: 15px;">
-        <small style="color: #7f8c8d; display: block; margin-bottom: 4px;">SINAV FAKÜLTESİ</small>
-        <span style="font-size: 1.1rem; font-weight: 600; color: #34495e;">${student.Fakulte}</span>
-    </div>
+                    <div style="margin-bottom: 15px;">
+                        <small style="color: #7f8c8d; display: block; margin-bottom: 4px;">SINAV FAKÜLTESİ</small>
+                        <span style="font-size: 1.1rem; font-weight: 600; color: #34495e;">${student.Fakulte}</span>
+                    </div>
 
-    <div style="margin-bottom: 10px;">
-        <small style="color: #7f8c8d; display: block; margin-bottom: 4px;">SINAV DERSLİĞİ</small>
-        <span style="font-size: 1.3rem; font-weight: 800; color: #e74c3c;">${student.Derslik}</span>
-    </div>
-`;
-        } else {
-            sonucDiv.className = "hata";
-            sonucDiv.innerHTML = "Kayıt bulunamadı. Lütfen numaranızı ve dersi kontrol ediniz.";
+                    <div style="margin-bottom: 10px;">
+                        <small style="color: #7f8c8d; display: block; margin-bottom: 4px;">SINAV DERSLİĞİ</small>
+                        <span style="font-size: 1.3rem; font-weight: 800; color: #e74c3c;">${student.Derslik}</span>
+                    </div>
+                `;
+            } else {
+                sonucDiv.className = "hata";
+                sonucDiv.innerHTML = "Kayıt bulunamadı. Lütfen numaranızı ve dersi kontrol ediniz.";
+            }
+        },
+        error: function() {
+            alert("Veri dosyasına ulaşılamadı. CSV dosyasının adını ve GitHub'daki varlığını kontrol edin.");
         }
-    },
-    error: function() {
-        alert("Veri dosyasına ulaşılamadı. Lütfen admin ile iletişime geçin.");
-    }
-});
+    });
 }
 </script>
 
