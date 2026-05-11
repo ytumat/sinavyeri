@@ -183,34 +183,47 @@ function searchExam() {
 
             sonucDiv.style.display = "block";
             
-            if (student) {
+           if (student) {
     sonucDiv.className = "basarili";
     const tamAd = `${student.Ad || ''} ${student.Soyad || ''}`;
     
     sonucDiv.innerHTML = `
+        <!-- Başlık Kısmı -->
         <div style="text-align: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
             <span style="font-size: 1.1rem; color: #2c3e50;">Sayın / Dear</span><br>
             <strong style="font-size: 1.4rem; color: #1a73e8; text-transform: uppercase;">${tamAd}</strong>
         </div>
 
-        <div style="line-height: 1.6; color: #34495e; font-size: 15px;">
-            <p>
-                Sınav yeriniz <strong>${student.Fakulte}</strong> binası, 
-                <strong style="color: #e74c3c; font-size: 1.2rem;">${student.Derslik}</strong> numaralı derslik olarak belirlenmiştir.
+        <!-- Bilgi Alanları -->
+        <div style="margin-bottom: 15px;">
+            <small style="color: #7f8c8d; display: block; margin-bottom: 4px;">FAKÜLTE / FACULTY</small>
+            <span style="font-size: 1.1rem; font-weight: 600; color: #34495e;">${student.Fakulte || '-'}</span>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <small style="color: #7f8c8d; display: block; margin-bottom: 4px;">SINAV SALONU / EXAM HALL</small>
+            <span style="font-size: 1.3rem; font-weight: 800; color: #e74c3c;">${student.Derslik || '-'}</span>
+        </div>
+
+        <!-- Bağlayıcı Metin Bölümü -->
+        <div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 14px; line-height: 1.6; color: #2d3748;">
+            <p style="margin: 0;">
+                Yukarıda belirtilen <strong>${student.Fakulte}</strong> binası, 
+                <strong>${student.Derslik}</strong> numaralı derslikte sınava girmeniz gerekmektedir.
             </p>
-            <p style="color: #7f8c8d; font-style: italic; border-top: 1px solid #f0f0f0; pt: 10px;">
-                Your exam will take place in the <strong>${student.Fakulte}</strong> building, 
-                room <strong>${student.Derslik}</strong>.
+            <p style="margin: 8px 0 0 0; color: #718096; font-style: italic; font-size: 13px; border-top: 1px solid #e2e8f0; pt: 8px;">
+                You are required to take the exam in room <strong>${student.Derslik}</strong> 
+                at the <strong>${student.Fakulte}</strong> building mentioned above.
             </p>
         </div>
 
-        <div style="margin-top: 20px; padding: 10px; background: #fffaf0; border-radius: 8px; border: 1px solid #feebc8; font-size: 13px; color: #7b341e;">
-            <strong>HATIRLATMA / REMINDER:</strong><br>
-            Sınav saatinden 15 dk. önce öğrenci kimliğinizle birlikte hazır bulununuz.<br>
-            <em>Please be ready 15 min. before the exam with your student ID.</em>
-        </div>
+        <!-- Hatırlatma -->
+        <p style="text-align: center; font-size: 12px; color: #a0aec0; margin-top: 15px;">
+            Lütfen sınavdan 15 dk. önce hazır bulununuz. / Please be ready 15 min. before.
+        </p>
     `;
-            } else {
+}
+             else {
                 sonucDiv.className = "hata";
                 sonucDiv.innerHTML = `
                     <strong>Kayıt bulunamadı.</strong><br>
