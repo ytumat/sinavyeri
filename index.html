@@ -44,31 +44,38 @@ function sorgula() {
 
     // CSV dosyasını GitHub'daki dosya yolundan okur
     Papa.parse(dersDosyası, {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete: function(results) {
-            const liste = results.data;
-            // Excel sütun isimlerinizle birebir aynı olmalı: "No", "AdSoyad", "Fakulte", "Derslik"
-            const ogrenci = liste.find(o => o.No === no);
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete: function(results) {
+        const liste = results.data;
+        
+        // Excel sütun başlıklarınız: "No", "Ad", "Soyad", "Fakulte", "Derslik"
+        // Liste içinde öğrenci numarasını (no) arıyoruz
+        const student = liste.find(o => o.No === no);
 
-            sonucDiv.style.display = "block";
-            if (ogrenci) {
-                sonucDiv.className = "basarili";
-                sonucDiv.innerHTML = `
-                    <strong>${ogrenci.AdSoyad}</strong><br>
-                    Fakülte: ${ogrenci.Fakulte}<br>
-                    Derslik: ${ogrenci.Derslik}
-                `;
-            } else {
-                sonucDiv.className = "hata";
-                sonucDiv.innerHTML = "Kayıt bulunamadı. Lütfen numarayı ve dersi kontrol edin.";
-            }
-        },
-        error: function() {
-            alert("Veri dosyasına ulaşılamadı. Lütfen admin ile iletişime geçin.");
+        sonucDiv.style.display = "block";
+        
+        if (student) {
+            sonucDiv.className = "basarili";
+            
+            // Ad ve Soyad sütunlarını birleştiriyoruz
+            const tamAd = `${student.Ad} ${student.Soyad}`;
+            
+            sonucDiv.innerHTML = `
+                <strong>Sayın ${tamAd}</strong><br>
+                📍 <b>Sınav Yerinizin bulunduğu Fakülte:</b> ${student.Fakulte}<br>
+                🚪 <b>Sınava Gireceğiniz Derslik:</b> ${student.Derslik}
+            `;
+        } else {
+            sonucDiv.className = "hata";
+            sonucDiv.innerHTML = "Kayıt bulunamadı. Lütfen numaranızı ve dersi kontrol ediniz.";
         }
-    });
+    },
+    error: function() {
+        alert("Veri dosyasına ulaşılamadı. Lütfen admin ile iletişime geçin.");
+    }
+});
 }
 </script>
 
