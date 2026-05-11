@@ -205,22 +205,15 @@ function searchExam() {
             <span style="font-size: 1.3rem; font-weight: 800; color: #e74c3c;">${student.Derslik || '-'}</span>
         </div>
 
-        <!-- Bağlayıcı Metin Bölümü -->
-        <div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 14px; line-height: 1.6; color: #2d3748;">
-            <p style="margin: 0;">
-                Yukarıda belirtilen <strong>${student.Fakulte}</strong> binası, 
-                <strong>${student.Derslik}</strong> numaralı derslikte sınava girmeniz gerekmektedir.
+        <!-- Talimat Metni -->
+        <div style="border-top: 2px solid #f8fafc; pt: 15px; margin-top: 10px; color: #4a5568; font-size: 14px; line-height: 1.5;">
+            <p style="margin-bottom: 8px;">
+                Yukarıda belirtilen fakültedeki belirtilen derslikte sınava girmeniz gerekmektedir.
             </p>
-            <p style="margin: 8px 0 0 0; color: #718096; font-style: italic; font-size: 13px; border-top: 1px solid #e2e8f0; pt: 8px;">
-                You are required to take the exam in room <strong>${student.Derslik}</strong> 
-                at the <strong>${student.Fakulte}</strong> building mentioned above.
+            <p style="margin: 0; color: #a0aec0; font-style: italic; font-size: 13px;">
+                You are required to take the exam in the faculty and room specified above.
             </p>
         </div>
-
-        <!-- Hatırlatma -->
-        <p style="text-align: center; font-size: 12px; color: #a0aec0; margin-top: 15px;">
-            Lütfen sınavdan 15 dk. önce hazır bulununuz. / Please be ready 15 min. before.
-        </p>
     `;
 }
              else {
