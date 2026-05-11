@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Sınav Yeri Sorgulama Sistemi</title>
+    <!-- Hızlı CSV okuma için PapaParse kütüphanesi -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding-top: 50px; background: #f4f7f6; }
+        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 350px; }
+        select, input, button { width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { background: #2c3e50; color: white; cursor: pointer; border: none; font-weight: bold; }
+        button:hover { background: #34495e; }
+        #sonuc { margin-top: 20px; padding: 15px; border-radius: 5px; display: none; }
+        .basarili { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .hata { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Sınav Yeri Sorgula</h2>
+    
+    <label>Ders Seçiniz:</label>
+    <select id="dersSecimi">
+        <option value="matematik.csv">Matematik-1</option>
+        <option value="fizik.csv">Fizik-2</option>
+        <option value="lineer.csv">Lineer Cebir</option>
+    </select>
+
+    <input type="text" id="ogrenciNo" placeholder="Öğrenci Numaranız">
+    <button onclick="sorgula()">Sorgula</button>
+
+    <div id="sonuc"></div>
+</div>
+
+<script>
+function sorgula() {
+    const dersDosyası = document.getElementById('dersSecimi').value;
+    const no = document.getElementById('ogrenciNo').value.trim();
+    const sonucDiv = document.getElementById('sonuc');
+
+    if (!no) { alert("Lütfen numaranızı girin"); return; }
+
+    // CSV dosyasını GitHub'daki dosya yolundan okur
+    Papa.parse(dersDosyası, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            const liste = results.data;
+            // Excel sütun isimlerinizle birebir aynı olmalı: "No", "AdSoyad", "Fakulte", "Derslik"
+            const ogrenci = liste.find(o => o.No === no);
+
+            sonucDiv.style.display = "block";
+            if (ogrenci) {
+                sonucDiv.className = "basarili";
+                sonucDiv.innerHTML = `
+                    <strong>${ogrenci.AdSoyad}</strong><br>
+                    Fakülte: ${ogrenci.Fakulte}<br>
+                    Derslik: ${ogrenci.Derslik}
+                `;
+            } else {
+                sonucDiv.className = "hata";
+                sonucDiv.innerHTML = "Kayıt bulunamadı. Lütfen numarayı ve dersi kontrol edin.";
+            }
+        },
+        error: function() {
+            alert("Veri dosyasına ulaşılamadı. Lütfen admin ile iletişime geçin.");
+        }
+    });
+}
+</script>
+
+</body>
+</html>
